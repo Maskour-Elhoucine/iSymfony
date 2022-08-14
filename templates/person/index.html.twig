@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PersonController!{% endblock %}
+{% block title %}List of persons{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/maskour/itProjects/Symfony/iFirst/src/Controller/PersonController.php'|file_link(0) }}">src/Controller/PersonController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/maskour/itProjects/Symfony/iFirst/templates/person/index.html.twig'|file_link(0) }}">templates/person/index.html.twig</a></code></li>
-    </ul>
+<div class="container py-5">
+    <div class="row">
+        {% if persons | length > 0 %}
+            {% for person in persons %}
+                <div class="col-3 mt-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title"> <i class="fas fa-user"></i> {{ person.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted"> <i class="fas fa-calendar-alt"></i> {{ person.birthday | date('d/m/Y') }}</h6>
+                            <p class="card-text"> <i class="fas fa-envelope"></i> {{ person.email }}</p>
+                            <p class="card-text"> <i class="fas fa-phone-alt"></i> {{ person.phone }}</p>
+                            <a href="#" class="card-link">detail</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h4>No persons found</h4>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

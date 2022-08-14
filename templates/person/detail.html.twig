@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ dump(person) }}
+    <div class="alert alert-success">
+        {{ person.name | capitalize }} born on {{ person.birthday | date('d/m/Y') }}
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
