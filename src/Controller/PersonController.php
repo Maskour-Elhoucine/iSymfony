@@ -12,14 +12,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class PersonController extends AbstractController
 {
 
-    #[Route("/", name: "person.list")]
-    public function index(ManagerRegistry $managerRegistry): Response
+    #[Route("/{page?1}/{page_size?10}", name: "person.list")]
+    public function index(ManagerRegistry $managerRegistry, $page, $page_size): Response
     {
         $repository = $managerRegistry->getRepository(Person::class);
-        $persons = $repository->findAll();
+        $nbPersons = $repository->count([]);
+        $nbPages = ceil($nbPersons / $page_size);
+        $persons = $repository->findBy([], [], $page_size, ($page - 1) * $page_size);
 
         return $this->render('person/index.html.twig', [
             'persons' => $persons,
+            'isPaginated' => true,
+            'nbPages' => $nbPages,
+            'page' => $page,
+            'page_size' => $page_size,
+        ]);
+    }
+
+    #[Route("/{id<\d+>}", name: "person.show")]
+    public function show(ManagerRegistry $managerRegistry, $id): Response
+    {
+        $repository = $managerRegistry->getRepository(Person::class);
+        $person = $repository->find($id);
+        if (!$person) {
+            $this->addFlash("error", "The person with $id not existed!");
+            return $this->redirectToRoute("person.list");
+        }
+        return $this->render('person/detail.html.twig', [
+            'person' => $person,
         ]);
     }
 
@@ -42,5 +62,10 @@ class PersonController extends AbstractController
         return $this->render('person/detail.html.twig', [
             'person' => $person,
         ]);
+    }
+
+    #[Route('/delete/{id<\d+>}', name: 'person.delete')]
+    public function deletePerson() {
+
     }
 }

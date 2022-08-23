@@ -15,7 +15,7 @@
                             <h6 class="card-subtitle mb-2 text-muted"> <i class="fas fa-calendar-alt"></i> {{ person.birthday | date('d/m/Y') }}</h6>
                             <p class="card-text"> <i class="fas fa-envelope"></i> {{ person.email }}</p>
                             <p class="card-text"> <i class="fas fa-phone-alt"></i> {{ person.phone }}</p>
-                            <a href="#" class="card-link">detail</a>
+                            <a href="{{ path("person.show", {id: person.id}) }}" class="card-link">detail</a>
                         </div>
                     </div>
                 </div>
@@ -24,5 +24,29 @@
             <h4>No persons found</h4>
         {% endif %}
     </div>
+
+    {% if isPaginated %}
+        <nav aria-label="Page navigation example" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page != 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('person.list', {page: page - 1, page_size: page_size}) }}" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for i in range(1, nbPages) %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('person.list', {page: i, page_size: page_size}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if page != nbPages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('person.list', {page: page + 1, page_size: page_size}) }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
 </div>
 {% endblock %}
